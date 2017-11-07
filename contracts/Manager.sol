@@ -7,21 +7,25 @@ contract Manager {
         _;
     }
 
-    mapping(string => address) public contracts;
+    mapping(bytes32 => address) public contracts;
 
     address public owner;
-    string public activeContract;
+    bytes32 public activeContract;
 
     function Manager() public {
         owner = msg.sender;
     }
 
-    function setActiveContract(string contractVersion) public onlyOwner {
+    function setActiveContract(bytes32 contractVersion) public onlyOwner {
         activeContract = contractVersion;
     }
 
-    function addContract(string contractVersion, address contractAddress) public onlyOwner {
+    function addContract(bytes32 contractVersion, address contractAddress) public onlyOwner {
         contracts[contractVersion] = contractAddress;
+    }
+
+    function getActiveContract() public constant returns(address) {
+        return contracts[activeContract];
     }
 
 }

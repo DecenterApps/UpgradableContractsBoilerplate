@@ -1,20 +1,17 @@
 pragma solidity ^0.4.15;
 
 import "./DelegateProxy.sol";
+import "./Manager.sol";
 
 contract AppProxy is DelegateProxy {
+    
+    Manager public manager;
 
-    address public target;
-
-    function AppProxy(address _target) {
-        target = _target;
-    }
-
-    function setTarget(address _target) {
-        target = _target;
+    function AppProxy(address managerAddress) {
+        manager = Manager(managerAddress);
     }
 
     function () payable public {
-        delegatedFwd(target, msg.data);
+        delegatedFwd(manager.getActiveContract(), msg.data);
     }
 }
