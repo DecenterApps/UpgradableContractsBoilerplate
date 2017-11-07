@@ -3,11 +3,11 @@ pragma solidity ^0.4.15;
 import "./DelegateProxy.sol";
 import "./Manager.sol";
 
-contract AppProxy is DelegateProxy {
+contract Relay is DelegateProxy {
     
     Manager public manager;
 
-    function AppProxy(address managerAddress) {
+    function Relay(address managerAddress) public {
         manager = Manager(managerAddress);
     }
 

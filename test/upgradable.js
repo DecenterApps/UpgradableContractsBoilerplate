@@ -1,4 +1,4 @@
-const AppProxy = artifacts.require("AppProxy.sol");
+const Relay = artifacts.require("Relay.sol");
 const Upgradable = artifacts.require("Upgradable.sol");
 const Upgradable2 = artifacts.require("Upgradable2.sol");
 const Manager = artifacts.require("Manager.sol");
@@ -7,9 +7,9 @@ const { hash } = require('eth-ens-namehash');
 
 contract('Upgradable', async (accounts) => {
 
-    let appProxy, manager;
+    let relay, manager;
 
-    it('Should call upgradable through the AppProxy contract', async () => {
+    it('Should call upgradable through the Relay contract', async () => {
 
         manager = await Manager.new();
 
@@ -22,10 +22,10 @@ contract('Upgradable', async (accounts) => {
         await manager.setActiveContract(version);
 
         // create a proxy contract that's just going to delegate calls and keep state
-        appProxy = await AppProxy.new(manager.address);
+        relay = await Relay.new(manager.address);
 
         // The upgradable contract that will change
-        const upgradable = await Upgradable.at(appProxy.address);
+        const upgradable = await Upgradable.at(relay.address);
 
         await upgradable.setA(42);
 
@@ -43,7 +43,7 @@ contract('Upgradable', async (accounts) => {
         await manager.addContract(version, app.address);
         await manager.setActiveContract(version);
 
-        const upgradable2 = await Upgradable2.at(appProxy.address);
+        const upgradable2 = await Upgradable2.at(relay.address);
 
         const res = await upgradable2.getA();
 
@@ -57,7 +57,7 @@ contract('Upgradable', async (accounts) => {
 
     it('should call a new updated method from the contract', async () => {
 
-        const upgradable2 = await Upgradable2.at(appProxy.address);
+        const upgradable2 = await Upgradable2.at(relay.address);
 
         await upgradable2.setB(42);
         
