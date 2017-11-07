@@ -17,6 +17,7 @@ contract Manager {
     }
 
     function setActiveContract(bytes32 contractVersion) public onlyOwner {
+        require(contracts[contractVersion] != 0x0);
         activeContract = contractVersion;
     }
 

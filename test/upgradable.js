@@ -34,7 +34,7 @@ contract('Upgradable', async (accounts) => {
         assert.equal(res.valueOf(), 42);
     });
 
-    it('Should upgrade the contract and keep the storage the same', async () => {
+    it('Should upgrade the contract and how it works while keeping the storage', async () => {
 
         const app = await Upgradable2.new();
 
@@ -53,12 +53,38 @@ contract('Upgradable', async (accounts) => {
 
         assert.equal(a.valueOf(), 52, "Changed the way the function works");
 
-        // await upgradable2.setB(42);
+    });
+
+    it('should call a new updated method from the contract', async () => {
+
+        const upgradable2 = await Upgradable2.at(appProxy.address);
+
+        await upgradable2.setB(42);
         
-        // const b = await upgradable2.getB();
+        const b = await upgradable2.getB();
 
-        // console.log(b.valueOf());
+        assert.equal(b.valueOf(), 42);
+    });
 
+    it('should fail to set an active contract if not the owner', async () => {
+        
+        const version = hash("v1.0.0");
+        
+        try {
+            await manager.setActiveContract(version, { from: accounts[2]});
+        } catch(err) {
+            assert.isTrue(err.toString().includes('invalid opcode'));
+        }
+    });
 
+    it('should fail to add a contract if not the owner', async () => {
+        
+        const version = hash("v1.0.0");
+        
+        try {
+            await manager.addContract(version, "0x0", { from: accounts[2]});
+        } catch(err) {
+            assert.isTrue(err.toString().includes('invalid opcode'));
+        }
     });
 });
