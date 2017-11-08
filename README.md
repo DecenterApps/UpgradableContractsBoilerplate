@@ -1,4 +1,4 @@
-# upgradable
+# Upgradable contracts boilerplate
 Building smart contracts that are completely upgradable
 
 This design was inspired by the talk Jorge Izquierdo gave at devcon3 [link](https://www.youtube.com/watch?v=aMs0wAFIu7I&feature=youtu.be&t=1h19m26s)
